@@ -4,38 +4,40 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 dotenv.config();
-
 var getEmailUrl = "https://api.ontraport.com/1/object/getByEmail";
 var getContactUrl = "https://api.ontraport.com/1/Contacts";
-
 const corsOptions = {
-  origin: "https://members.awardee.com.au",
+  origin: [
+    "http://localhost:3002",
+    "http://127.0.0.1:5500", // Your development server
+    "https://members.awardee.com.au", // Your production server
+  ],
   // You can also configure other CORS options here if needed
 };
 app.use(cors(corsOptions));
-
 var headers = {
   "Api-Appid": process.env.API_APPID,
   "Api-Key": process.env.API_KEY,
 };
-
 var fetchContactId = function (email) {
   var params = {
     objectID: 0,
     email: email,
     all: 0,
   };
-
   var url = getEmailUrl + "?" + new URLSearchParams(params);
-
   return axios(url, {
     method: "GET",
     headers: headers,
   })
     .then(function (response) {
       if (response.status !== 200) {
-        throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
+        throw new Error(
+          `Network response was not ok: ${response.status} ${response.statusText}`
+        );
       }
+      console.log(response.data);
+      console.log(response);
       return response.data;
     })
     .then(function (data) {
@@ -49,25 +51,26 @@ var fetchContactId = function (email) {
       throw new Error(`Error fetching contact ID: ${error.message}`);
     });
 };
-
 var fetchContactDetailsById = function (contactId) {
   var params = {
     ids: contactId,
   };
-
   var url = getContactUrl + "?" + new URLSearchParams(params);
-
   return axios(url, {
     method: "GET",
     headers: headers,
   })
     .then(function (response) {
       if (response.status !== 200) {
-        throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
+        throw new Error(
+          `Network response was not ok: ${response.status} ${response.statusText}`
+        );
       }
+      console.log(response);
       return response.data;
     })
     .then(function (data) {
+      console.log(data);
       if (data && data.data && data.data.length > 0) {
         var email = data.data[0].email;
         var firstname = data.data[0].firstname;
@@ -81,23 +84,21 @@ var fetchContactDetailsById = function (contactId) {
       throw new Error(`Error fetching contact details: ${error.message}`);
     });
 };
-
 var fetchContactDetailsByEmail = function (email) {
   return fetchContactId(email)
     .then(function (contactId) {
       return fetchContactDetailsById(contactId);
     })
     .catch(function (error) {
-      throw new Error(`Error fetching contact details by email: ${error.message}`);
+      throw new Error(
+        `Error fetching contact details by email: ${error.message}`
+      );
     });
 };
-
 // Middleware to parse JSON bodies
 app.use(express.json());
-
 // Middleware to parse URL-encoded bodies
 app.use(express.urlencoded({ extended: true }));
-
 app.get("/", async function (req, res) {
   let email = req.query.email;
   if (!email) {
@@ -110,7 +111,6 @@ app.get("/", async function (req, res) {
     res.status(404).json({ error: error.message });
   }
 });
-
 app.listen("3002", function (err) {
   if (err) {
     console.error("Error starting server:", err);
