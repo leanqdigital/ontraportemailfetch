@@ -8,8 +8,6 @@ var getEmailUrl = "https://api.ontraport.com/1/object/getByEmail";
 var getContactUrl = "https://api.ontraport.com/1/Contacts";
 const corsOptions = {
   origin: [
-    "http://localhost:3002",
-    "http://127.0.0.1:5500", // Your development server
     "https://members.awardee.com.au", // Your production server
   ],
   // You can also configure other CORS options here if needed
