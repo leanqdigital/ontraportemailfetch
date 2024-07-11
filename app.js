@@ -8,9 +8,8 @@ var getEmailUrl = "https://api.ontraport.com/1/object/getByEmail";
 var getContactUrl = "https://api.ontraport.com/1/Contacts";
 const corsOptions = {
   origin: [
-    "https://members.awardee.com.au", // Your production server
+    "https://members.awardee.com.au",
   ],
-  // You can also configure other CORS options here if needed
 };
 app.use(cors(corsOptions));
 var headers = {
@@ -93,9 +92,7 @@ var fetchContactDetailsByEmail = function (email) {
       );
     });
 };
-// Middleware to parse JSON bodies
 app.use(express.json());
-// Middleware to parse URL-encoded bodies
 app.use(express.urlencoded({ extended: true }));
 app.get("/", async function (req, res) {
   let email = req.query.email;
