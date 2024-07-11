@@ -106,7 +106,7 @@ app.get("/", async function (req, res) {
     res.status(404).json({ error: error.message });
   }
 });
-app.listen("3002", function (err) {
+app.listen(function (err) {
   if (err) {
     console.error("Error starting server:", err);
   } else {
