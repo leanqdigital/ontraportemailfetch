@@ -15,7 +15,7 @@ const corsOptions = {
 };
 
 app.use(morgan("dev"));
-app.use(cors("*"));
+app.use(cors(corsOptions));
 var headers = {
   "Api-Appid": process.env.API_APPID,
   "Api-Key": process.env.API_KEY,
