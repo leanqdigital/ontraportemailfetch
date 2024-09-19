@@ -3,6 +3,7 @@ var dotenv = require("dotenv");
 const express = require("express");
 const app = express();
 const cors = require("cors");
+
 const morgan = require("morgan");
 
 dotenv.config();
@@ -76,7 +77,7 @@ var fetchContactDetailsById = function (contactId) {
         var email = data.data[0].email;
         var firstname = data.data[0].firstname;
         var lastname = data.data[0].lastname;
-        var headOffice = data.data[0].f2036;
+        var headOffice = data.data[0].f3440;
         return { email: email, firstname: firstname, lastname: lastname, headOffice: headOffice };
       } else {
         throw new Error("Contact details not found");
@@ -125,7 +126,7 @@ app.get("/head-office", async function(req,res) {
     res.status(404).json({ error: error.message });
   }
 })
-app.listen(function (err) {
+app.listen(3002, function (err) {
   if (err) {
     console.error("Error starting server:", err);
   } else {
